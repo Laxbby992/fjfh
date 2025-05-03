@@ -698,7 +698,4 @@ def flood():
         return jsonify({"error": f"Server error during flood setup: {e}"}), 500
 
 if __name__ == '__main__':
-     # Make sure to use a production-ready server like gunicorn or waitress instead of Flask's built-in server for deployment
-     # Example: waitress-serve --host=0.0.0.0 --port=3266 app:app
-     # For development:
-     app.run(host='0.0.0.0', port=3266, debug=False) # Set debug=False for better performance and security, True only for active development
+     app.run(host='0.0.0.0', port=3266, debug=False)
