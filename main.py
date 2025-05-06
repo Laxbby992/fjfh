@@ -499,10 +499,6 @@ html_template = """
         <h1>EzFlooder</h1>
         <form id="floodForm">
             <div class="form-group">
-                <label for="gamePin">Join Delay:</label>
-                <input type="number" id="delay" name="delay" required>
-            </div>
-            <div class="form-group">
                 <label for="delay">Game PIN:</label>
                 <input type="text" id="gamePin" name="gamePin" required>
             </div>
@@ -517,6 +513,10 @@ html_template = """
             <div class="checkbox-group">
                 <input type="checkbox" id="addRandom" name="addRandom" checked>
                 <label for="addRandom">Add Random String (e.g. _aBcD)</label>
+            </div>
+            <div class="form-group">
+                <label for="gamePin">Join Delay:</label>
+                <input type="number" id="delay" name="delay" required>
             </div>
             <button type="submit" id="floodButton">Start Flooding</button>
         </form>
