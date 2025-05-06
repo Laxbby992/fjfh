@@ -514,10 +514,6 @@ html_template = """
                 <input type="checkbox" id="addRandom" name="addRandom" checked>
                 <label for="addRandom">Add Random String (e.g. _aBcD)</label>
             </div>
-            <div class="form-group">
-                <label for="gamePin">Join Delay:</label>
-                <input type="number" id="delay" name="delay" required>
-            </div>
             <button type="submit" id="floodButton">Start Flooding</button>
         </form>
         <div class="progress-container" id="progressBarContainer">
@@ -643,7 +639,6 @@ def index():
 
 @app.route('/flood', methods=['POST'])
 def flood():
-    delay = request.form.get('delay')
     game_pin = request.form.get('gamePin')
     num_bots = request.form.get('numBots', type=int)
     custom_name = request.form.get('customName', '').strip()
@@ -673,7 +668,7 @@ def flood():
 
 
             tasks.append(client.join(pin, name))
-            await asyncio.sleep(delay) # Keep a small delay
+            await asyncio.sleep(0.2) # Keep a small delay
 
         results = await asyncio.gather(*tasks, return_exceptions=True)
         successful_joins = sum(1 for res in results if not isinstance(res, Exception))
