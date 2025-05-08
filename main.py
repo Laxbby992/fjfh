@@ -249,386 +249,301 @@ html_template = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EzFlooder</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        *, *::before, *::after {
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            background-size: 400% 400%;
-            animation: gradientAnimation 15s ease infinite;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            line-height: 1.6;
-        }
-
-        @keyframes gradientAnimation {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .container {
-            background-color: rgba(0, 0, 0, 0.2);
-            padding: 40px;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            text-align: center;
-            max-width: 450px;
-            width: 100%;
-            animation: scaleIn 0.6s ease-out;
-            position: relative;
-            overflow: hidden;
-        }
-
-        @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        h1 {
-            margin-bottom: 30px;
-            color: #fff;
-            font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-            font-size: 2.2rem;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 700;
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 0.95rem;
-        }
-
-        input[type="text"],
-        input[type="number"] {
-            width: 100%;
-            padding: 12px 18px;
-            border: none;
-            border-radius: 8px;
-            background-color: rgba(255, 255, 255, 0.1);
-            color: #fff;
-            font-size: 1rem;
-            font-family: 'Poppins', sans-serif;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        input[type="text"]::placeholder,
-        input[type="number"]::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        input[type="text"]:focus,
-        input[type="number"]:focus {
-            outline: none;
-            background-color: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 0 0 3px rgba(77, 208, 225, 0.4); /* Cyan focus */
-            border-color: rgba(77, 208, 225, 0.6);
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            margin-top: -10px;
-            margin-bottom: 20px;
-        }
-
-        .checkbox-group input[type="checkbox"] {
-            margin-right: 10px;
-            width: 18px;
-            height: 18px;
-            accent-color: #00bcd4; /* Cyan */
-            cursor: pointer;
-        }
-
-        .checkbox-group label {
-            margin-bottom: 0;
-            font-weight: 400;
-            font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.8);
-            cursor: pointer;
-        }
-
-
-        button {
-            background: linear-gradient(45deg, #00bcd4 0%, #4dd0e1 100%); /* Cyan gradient */
-            color: white;
-            padding: 14px 25px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1.1rem;
-            font-weight: 700;
-            font-family: 'Poppins', sans-serif;
-            transition: opacity 0.3s ease, transform 0.1s ease, background-color 0.3s ease, box-shadow 0.3s ease;
-            width: 100%;
-            margin-top: 15px;
-            box-shadow: 0 4px 15px rgba(0, 188, 212, 0.3);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        button:hover {
-            opacity: 0.9;
-            box-shadow: 0 6px 20px rgba(0, 188, 212, 0.4);
-        }
-
-        button:active {
-            transform: scale(0.98);
-            box-shadow: 0 2px 10px rgba(0, 188, 212, 0.3);
-        }
-
-        button:disabled {
-            background: #90a4ae; /* Greyer disabled state */
-            cursor: not-allowed;
-            box-shadow: none;
-            opacity: 0.7;
-        }
-
-        .progress-container {
-            width: 100%;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            margin-top: 25px;
-            overflow: hidden;
-            height: 22px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            display: none;
-        }
-
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background: linear-gradient(90deg, #00bcd4, #80deea); /* Lighter cyan gradient */
-            border-radius: 10px; /* Adjusted for container */
-            transition: width 0.4s ease-in-out, background-color 0.4s ease;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .progress-bar-text {
-            position: absolute; /* Keep absolute for fine control if needed */
-            width: 100%;
-            text-align: center;
-            color: white;
-            font-weight: bold;
-            font-size: 0.8rem;
-            line-height: 22px; /* Match container height */
-            text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.6);
-            z-index: 2;
-            transition: color 0.4s ease;
-        }
-
-        #statusMessage {
-            margin-top: 15px;
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.9);
-            min-height: 1.5em;
-            word-break: break-word;
-        }
-
-        .loading-dots {
-            display: inline-block;
-            position: relative;
-            width: 60px;
-            text-align: center;
-            margin-left: 10px;
-            vertical-align: middle;
-        }
-
-        .loading-dots span {
-            position: relative;
-            width: 8px;
-            height: 8px;
-            margin: 0 2px;
-            background-color: #fff;
-            border-radius: 50%;
-            display: inline-block;
-            animation: dot-animation 1.4s infinite ease-in-out both;
-        }
-
-        .loading-dots span:nth-child(1) { animation-delay: -0.32s; }
-        .loading-dots span:nth-child(2) { animation-delay: -0.16s; }
-        .loading-dots span:nth-child(3) { animation-delay: 0s; }
-
-        @keyframes dot-animation {
-            0%, 80%, 100% { transform: scale(0); opacity: 0; }
-            40% { transform: scale(1); opacity: 1; }
-        }
-
-        .footer {
-            margin-top: 30px;
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .success-color { background: linear-gradient(90deg, #4CAF50, #8bc34a); }
-        .error-color { background: linear-gradient(90deg, #f44336, #ef5350); }
-
-    </style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EzFlooder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #0d1117;
+      color: white;
+      overflow-x: hidden;
+    }
+    canvas#bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+    .container {
+      max-width: 800px;
+      margin: auto;
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .form-group, .checkbox-group {
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      margin-bottom: 0.3rem;
+      font-weight: 500;
+    }
+    input[type="text"], input[type="number"] {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+    }
+    .checkbox-group {
+      flex-direction: row;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    button {
+      background: linear-gradient(135deg, #00ffff, #0066ff);
+      color: black;
+      font-family: 'Poppins', sans-serif;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      opacity: 0.8;
+    }
+    .progress-container {
+      width: 100%;
+      background: #333;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 1rem;
+      display: none;
+    }
+    .progress-bar {
+      height: 20px;
+      width: 0%;
+      background: linear-gradient(135deg, #00ffff, #0066ff);
+      transition: width 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .progress-bar-text {
+      font-size: 0.9rem;
+      color: black;
+      font-weight: bold;
+    }
+    .success-color {
+      background: #00e676 !important;
+    }
+    .error-color {
+      background: #ff1744 !important;
+    }
+    #statusMessage {
+      margin-top: 1rem;
+      font-size: 1rem;
+      text-align: center;
+    }
+    .loading-dots span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      margin: 0 2px;
+      background: white;
+      border-radius: 50%;
+      animation: loading 1s infinite ease-in-out;
+    }
+    .loading-dots span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    .loading-dots span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+    @keyframes loading {
+      0%, 80%, 100% {
+        transform: scale(0);
+      }
+      40% {
+        transform: scale(1);
+      }
+    }
+    .footer {
+      text-align: center;
+      margin-top: 4rem;
+      padding-bottom: 1rem;
+      color: #888;
+      font-size: 0.9rem;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>EzFlooder</h1>
-        <form id="floodForm">
-            <div class="form-group">
-                <label for="delay">Game PIN:</label>
-                <input type="text" id="gamePin" name="gamePin" required>
-            </div>
-            <div class="form-group">
-                <label for="numBots">Number of Bots:</label>
-                <input type="number" id="numBots" name="numBots" min="1" value="1" required>
-            </div>
-             <div class="form-group">
-                <label for="customName">Custom Bot Name (Optional):</label>
-                <input type="text" id="customName" name="customName">
-            </div>
-            <div class="checkbox-group">
-                <input type="checkbox" id="addRandom" name="addRandom" checked>
-                <label for="addRandom">Add Random String (e.g. _aBcD)</label>
-            </div>
-            <button type="submit" id="floodButton">Start Flooding</button>
-        </form>
-        <div class="progress-container" id="progressBarContainer">
-            <div class="progress-bar" id="progressBar">
-                 <span class="progress-bar-text" id="progressBarText">0%</span>
-            </div>
-        </div>
-        <div id="statusMessage"></div>
-         <div class="footer">
-            &copy; EzFlooder (Made by Laxbby99) 2025. All rights reserved.
-        </div>
+<canvas id="bg"></canvas>
+<div class="container">
+  <h1>EzFlooder</h1>
+  <form id="floodForm">
+    <div class="form-group">
+      <label for="gamePin">Game PIN:</label>
+      <input type="text" id="gamePin" name="gamePin" required>
     </div>
+    <div class="form-group">
+      <label for="numBots">Number of Bots:</label>
+      <input type="number" id="numBots" name="numBots" min="1" value="1" required>
+    </div>
+    <div class="form-group">
+      <label for="customName">Custom Bot Name (Optional):</label>
+      <input type="text" id="customName" name="customName">
+    </div>
+    <div class="checkbox-group">
+      <input type="checkbox" id="addRandom" name="addRandom" checked>
+      <label for="addRandom">Add Random String (e.g. _aBcD)</label>
+    </div>
+    <button type="submit" id="floodButton">Start Flooding</button>
+  </form>
+  <div class="progress-container" id="progressBarContainer">
+    <div class="progress-bar" id="progressBar">
+      <span class="progress-bar-text" id="progressBarText">0%</span>
+    </div>
+  </div>
+  <div id="statusMessage"></div>
+  <div class="footer">&copy; EzFlooder (Made by Laxbby99) 2025. All rights reserved.</div>
+</div>
 
-    <script>
-        const form = document.getElementById('floodForm');
-        const floodButton = document.getElementById('floodButton');
-        const statusMessageDiv = document.getElementById('statusMessage');
-        const progressBarContainer = document.getElementById('progressBarContainer');
-        const progressBar = document.getElementById('progressBar');
-        const progressBarText = document.getElementById('progressBarText');
-        let progressInterval = null;
+<script>
+  const canvas = document.getElementById('bg');
+  const ctx = canvas.getContext('2d');
+  let w = canvas.width = window.innerWidth;
+  let h = canvas.height = window.innerHeight;
+  let particles = Array.from({length: 60}, () => ({
+    x: Math.random() * w,
+    y: Math.random() * h,
+    r: Math.random() * 2 + 1,
+    dx: (Math.random() - 0.5) * 0.5,
+    dy: (Math.random() - 0.5) * 0.5
+  }));
 
-        form.addEventListener('submit', async (event) => {
-            event.preventDefault();
+  function animate() {
+    ctx.clearRect(0, 0, w, h);
+    for (let p of particles) {
+      ctx.beginPath();
+      const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
+      gradient.addColorStop(0, 'cyan');
+      gradient.addColorStop(1, 'blue');
+      ctx.fillStyle = gradient;
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fill();
+      p.x += p.dx;
+      p.y += p.dy;
+      if (p.x < 0 || p.x > w) p.dx *= -1;
+      if (p.y < 0 || p.y > h) p.dy *= -1;
+    }
+    requestAnimationFrame(animate);
+  }
+  animate();
+  window.onresize = () => {
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  };
 
-            const gamePin = document.getElementById('gamePin').value;
-            const numBots = parseInt(document.getElementById('numBots').value, 10);
-            const customName = document.getElementById('customName').value;
-            const addRandom = document.getElementById('addRandom').checked;
+  const form = document.getElementById('floodForm');
+  const floodButton = document.getElementById('floodButton');
+  const statusMessageDiv = document.getElementById('statusMessage');
+  const progressBarContainer = document.getElementById('progressBarContainer');
+  const progressBar = document.getElementById('progressBar');
+  const progressBarText = document.getElementById('progressBarText');
+  let progressInterval = null;
 
-            if (!gamePin || numBots <= 0) {
-                 statusMessageDiv.innerHTML = '<span style="color: #ffcc80;">Please enter valid Game PIN and Number of Bots.</span>'; // Warning color
-                 return;
-            }
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
 
-            floodButton.disabled = true;
-            statusMessageDiv.innerHTML = 'Starting flood... <div class="loading-dots"><span></span><span></span><span></span></div>';
-            progressBarContainer.style.display = 'block';
-            progressBar.style.width = '0%';
-            progressBarText.innerText = '0%';
-            progressBar.classList.remove('success-color', 'error-color'); // Reset colors
-            progressBar.style.background = ''; // Reset to default gradient
+    const gamePin = document.getElementById('gamePin').value;
+    const numBots = parseInt(document.getElementById('numBots').value, 10);
+    const customName = document.getElementById('customName').value;
+    const addRandom = document.getElementById('addRandom').checked;
 
-            let progress = 0;
-            const intervalTime = 50;
-            const totalTime = 3000;
-            const increment = (intervalTime / totalTime) * 95; // Animate up to 95% cosmetically
+    if (!gamePin || numBots <= 0) {
+      statusMessageDiv.innerHTML = '<span style="color: #ffcc80;">Please enter valid Game PIN and Number of Bots.</span>';
+      return;
+    }
 
-            if (progressInterval) clearInterval(progressInterval);
+    floodButton.disabled = true;
+    statusMessageDiv.innerHTML = 'Starting flood... <div class="loading-dots"><span></span><span></span><span></span></div>';
+    progressBarContainer.style.display = 'block';
+    progressBar.style.width = '0%';
+    progressBarText.innerText = '0%';
+    progressBar.classList.remove('success-color', 'error-color');
+    progressBar.style.background = '';
 
-            progressInterval = setInterval(() => {
-                 if (progress < 95) {
-                     progress += increment;
-                     if (progress > 95) progress = 95;
-                     const displayProgress = Math.round(progress);
-                     progressBar.style.width = displayProgress + '%';
-                     progressBarText.innerText = displayProgress + '%';
-                 } else {
-                     clearInterval(progressInterval);
-                 }
-            }, intervalTime);
+    let progress = 0;
+    const intervalTime = 50;
+    const totalTime = 3000;
+    const increment = (intervalTime / totalTime) * 95;
 
-            try {
-                const response = await fetch('/flood', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    body: new URLSearchParams({
-                        gamePin: gamePin,
-                        numBots: numBots,
-                        customName: customName,
-                        addRandom: addRandom ? 'true' : 'false'
-                    })
-                });
+    if (progressInterval) clearInterval(progressInterval);
 
-                clearInterval(progressInterval);
-                progressInterval = null;
+    progressInterval = setInterval(() => {
+      if (progress < 95) {
+        progress += increment;
+        if (progress > 95) progress = 95;
+        const displayProgress = Math.round(progress);
+        progressBar.style.width = displayProgress + '%';
+        progressBarText.innerText = displayProgress + '%';
+      } else {
+        clearInterval(progressInterval);
+      }
+    }, intervalTime);
 
-                const result = await response.json();
+    try {
+      const response = await fetch('/flood', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({
+          gamePin, numBots, customName, addRandom: addRandom ? 'true' : 'false'
+        })
+      });
 
-                progressBar.style.width = '100%'; // Go to 100%
+      clearInterval(progressInterval);
+      progressInterval = null;
 
-                if (response.ok) {
-                    statusMessageDiv.innerHTML = `<span style="color: #a5d6a7;">${result.message}</span>`; // Success color
-                    progressBarText.innerText = '100%';
-                    progressBar.classList.add('success-color');
-                    progressBar.style.background = ''; // Override inline style if set
-                } else {
-                    statusMessageDiv.innerHTML = `<span style="color: #ef9a9a;">Error: ${result.error}</span>`; // Error color
-                    progressBarText.innerText = 'Error';
-                    progressBar.classList.add('error-color');
-                    progressBar.style.background = ''; // Override inline style if set
-                }
+      const result = await response.json();
+      progressBar.style.width = '100%';
 
-            } catch (error) {
-                 if (progressInterval) clearInterval(progressInterval);
-                 progressInterval = null;
-                 progressBar.style.width = '100%'; // Show full bar on error
-                 progressBar.classList.add('error-color');
-                 progressBar.style.background = ''; // Override inline style if set
-                 progressBarText.innerText = 'Error';
-                 statusMessageDiv.innerHTML = `<span style="color: #ef9a9a;">An error occurred: ${error.message}</span>`;
-            } finally {
-                floodButton.disabled = false;
-                 setTimeout(() => {
-                    progressBarContainer.style.display = 'none';
-                    progressBar.style.width = '0%';
-                    progressBarText.innerText = '0%';
-                    progressBar.classList.remove('success-color', 'error-color');
-                    progressBar.style.background = ''; // Reset background fully
-                 }, 4000); // Increased delay to see final state
-            }
-        });
-    </script>
+      if (response.ok) {
+        statusMessageDiv.innerHTML = `<span style="color: #a5d6a7;">${result.message}</span>`;
+        progressBarText.innerText = '100%';
+        progressBar.classList.add('success-color');
+        progressBar.style.background = '';
+      } else {
+        statusMessageDiv.innerHTML = `<span style="color: #ef9a9a;">Error: ${result.error}</span>`;
+        progressBarText.innerText = 'Error';
+        progressBar.classList.add('error-color');
+        progressBar.style.background = '';
+      }
+
+    } catch (error) {
+      if (progressInterval) clearInterval(progressInterval);
+      progressInterval = null;
+      progressBar.style.width = '100%';
+      progressBar.classList.add('error-color');
+      progressBar.style.background = '';
+      progressBarText.innerText = 'Error';
+      statusMessageDiv.innerHTML = `<span style="color: #ef9a9a;">An error occurred: ${error.message}</span>`;
+    } finally {
+      floodButton.disabled = false;
+      setTimeout(() => {
+        progressBarContainer.style.display = 'none';
+        progressBar.style.width = '0%';
+        progressBarText.innerText = '0%';
+        progressBar.classList.remove('success-color', 'error-color');
+        progressBar.style.background = '';
+      }, 4000);
+    }
+  });
+</script>
 </body>
 </html>
 """
@@ -645,8 +560,7 @@ def flood():
     add_random = request.form.get('addRandom') == 'true'
 
     if not game_pin or not num_bots or num_bots <= 0:
-        logging.warning("Invalid request: Missing PIN or bot count.")
-        return jsonify({"error": "Invalid game PIN or number of bots."}), 400
+        logging.warning("Invalid request: Missing PIN osonify({"error": "Invalid game PIN or number of bots."}), 400
 
     async def run_flood_tasks(pin, count, base_name, use_random_suffix):
         client = KahootClient()
