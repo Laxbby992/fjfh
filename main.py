@@ -217,9 +217,9 @@ class KahootClient():
                             }
                         }
                         try:
-                           await websocket.send(json.dumps([heartbeat_data]))
-                           current_ack += 1
-                           await asyncio.sleep(10)
+                            await websocket.send(json.dumps([heartbeat_data]))
+                            current_ack += 1
+                            await asyncio.sleep(10)
                         except websockets.ConnectionClosed:
                             break
                         except Exception as e:
@@ -560,7 +560,8 @@ def flood():
     add_random = request.form.get('addRandom') == 'true'
 
     if not game_pin or not num_bots or num_bots <= 0:
-        logging.warning("Invalid request: Missing PIN osonify({"error": "Invalid game PIN or number of bots."}), 400
+        logging.warning("Invalid request: Missing PIN or invalid number of bots.")
+        return jsonify({"error": "Invalid game PIN or number of bots."}), 400
 
     async def run_flood_tasks(pin, count, base_name, use_random_suffix):
         client = KahootClient()
@@ -573,16 +574,14 @@ def flood():
                 random_suffix = generate_random_suffix(random.randint(3, 6))
                 name = f"{name}{suffix}_{random_suffix}" if suffix else f"{name}_{random_suffix}"
             elif not base_name:
-                 name = f"{name}_{i+1}"
+                name = f"{name}_{i+1}"
             
-            # Limiting name length based on potential Kahoot limits
             max_kahoot_name_length = 15 
             if len(name) > max_kahoot_name_length:
-                 name = name[:max_kahoot_name_length]
-
+                name = name[:max_kahoot_name_length]
 
             tasks.append(client.join(pin, name))
-            await asyncio.sleep(0.2) # Keep a small delay
+            await asyncio.sleep(0.2) 
 
         results = await asyncio.gather(*tasks, return_exceptions=True)
         successful_joins = sum(1 for res in results if not isinstance(res, Exception))
@@ -591,20 +590,16 @@ def flood():
         log_message = f"Flood attempt finished for game {pin}. Successfully initiated connections for {successful_joins}/{count} bots."
         if failed_joins > 0:
             log_message += f" Failed attempts: {failed_joins}."
-            # Log first few specific errors if needed
             errors_logged = 0
             for i, res in enumerate(results):
                 if isinstance(res, Exception) and errors_logged < 3:
-                     logging.warning(f"Bot {i+1} failed: {res}")
-                     errors_logged += 1
+                    logging.warning(f"Bot {i+1} failed: {res}")
+                    errors_logged += 1
 
         logging.info(log_message)
-        # The message returned to the user remains general
         return f"Flood attempt finished. Initiated {successful_joins}/{count} bot connections."
 
-
     try:
-        # Running asyncio task properly
         message = asyncio.run(run_flood_tasks(game_pin, num_bots, custom_name, add_random))
         return jsonify({"message": message})
     except Exception as e:
@@ -612,4 +607,4 @@ def flood():
         return jsonify({"error": f"Server error during flood setup: {e}"}), 500
 
 if __name__ == '__main__':
-     app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', port=5000, debug=False)
